@@ -1,0 +1,603 @@
+openapi: 3.0.1
+info:
+  title: Rakuten China Cross Border Trading Item Info API
+  description: Item Information Documents v6.0
+  version: '6.0'
+servers:
+  - url: 'http://localhost:8080'
+    description: Generated server url
+paths:
+  /details:
+    post:
+      tags:
+        - item-info-handler
+      operationId: handle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailsView'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+        '404':
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+  /groups:
+    post:
+      tags:
+        - item-info-handler
+      operationId: handleGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupMappingView'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+        '404':
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+  /i18ns:
+    post:
+      tags:
+        - item-info-handler
+      operationId: handle_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailsView'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+        '404':
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+  /inventories:
+    post:
+      tags:
+        - item-info-handler
+      operationId: handle_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoriesView'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+        '404':
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+  /prices:
+    post:
+      tags:
+        - item-info-handler
+      operationId: handle_3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricesView'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+        '404':
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+components:
+  schemas:
+    RawRequest:
+      required:
+        - sign
+        - spuIds
+      type: object
+      properties:
+        sign:
+          type: string
+          description: 'MD5 encrypt : KEY + spuIds + language'
+          example: 'MD5.encrypt(KEY["shopUrl/manageNumber"])'
+        spuIds:
+          type: array
+          description: A list of spuId
+          example:
+            - shopUrl/manageNumber
+          items:
+            type: string
+            description: A list of spuId
+            example: '["shopUrl/manageNumber"]'
+        language:
+          type: string
+          description: 'language is use for /i18ns API, other API is not required'
+          example: 'ja-JP,zh-CN,en-US,zh-TW'
+    AttributesView:
+      type: object
+      properties:
+        id:
+          type: string
+        nameJa:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+        unit:
+          type: string
+    DetailsView:
+      required:
+        - spuId
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: errorCode
+          example: shopUrl/manageNumber
+        spuId:
+          type: string
+          description: spuId is shopUrl join with slash and manageNumber)
+          example: shopUrl/manageNumber
+        name:
+          type: string
+        itemId:
+          type: integer
+          format: int64
+        genreId:
+          type: integer
+          format: int32
+        itemDesc:
+          type: string
+        itemDescBySalesMethod:
+          type: string
+        articleNumber:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageView'
+        taxFlag:
+          type: integer
+          format: int32
+        limitedFlg:
+          type: integer
+          format: int32
+        price:
+          type: integer
+          format: int64
+        maxUnit:
+          type: integer
+          format: int32
+        optionNameHorizontal:
+          type: string
+        optionNameVertical:
+          type: string
+        itemType:
+          type: integer
+          format: int32
+        timeSaleStartDateTime:
+          type: string
+        timeSaleEndDateTime:
+          type: string
+        itemStatus:
+          type: integer
+          format: int32
+        priceWithTax:
+          type: integer
+          format: int64
+        priceWithoutTax:
+          type: integer
+          format: int64
+        tagIds:
+          type: array
+          items:
+            type: string
+        inventories:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryView'
+        whiteBgImage:
+          $ref: '#/components/schemas/ImageView'
+        prices:
+          $ref: '#/components/schemas/PricesView'
+        variantsKey:
+          type: array
+          items:
+            type: string
+        genreName:
+          type: string
+        nameI18n:
+          type: object
+          additionalProperties:
+            type: string
+        genreNameI18n:
+          type: object
+          additionalProperties:
+            type: string
+        itemDescI18n:
+          type: object
+          additionalProperties:
+            type: string
+        optionNameHorizontalI18n:
+          type: object
+          additionalProperties:
+            type: string
+        optionNameVerticalI18n:
+          type: object
+          additionalProperties:
+            type: string
+        itemDescBySalesMethodI18n:
+          type: object
+          additionalProperties:
+            type: string
+    ImageView:
+      type: object
+      properties:
+        imageName:
+          type: string
+        imageUrl:
+          type: string
+    InventoryView:
+      required:
+        - horizontalName
+      type: object
+      properties:
+        inventoryId:
+          type: string
+        variantId:
+          type: string
+        horizontalName:
+          type: string
+        verticalName:
+          type: string
+        inventory:
+          type: integer
+          format: int32
+        image:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageView'
+        maxUnit:
+          type: integer
+          format: int32
+        priceWithTax:
+          type: integer
+          format: int64
+        priceWithoutTax:
+          type: integer
+          format: int64
+        articleNumber:
+          type: string
+        productNumber:
+          type: string
+        timeSaleStartDateTime:
+          type: string
+        timeSaleEndDateTime:
+          type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/AttributesView'
+        specs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpecsView'
+        hidden:
+          type: boolean
+        variantsValue:
+          type: object
+          additionalProperties:
+            type: string
+        verticalNameI18n:
+          type: object
+          additionalProperties:
+            type: string
+        horizontalNameI18n:
+          type: object
+          additionalProperties:
+            type: string
+        variantsValue18n:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: string
+    Price:
+      type: object
+      properties:
+        variantId:
+          type: string
+        variantsValue:
+          type: object
+          additionalProperties:
+            type: string
+        taxRate:
+          type: number
+        priceWithTax:
+          type: integer
+          format: int64
+        priceWithoutTax:
+          type: integer
+          format: int64
+    PricesView:
+      required:
+        - spuId
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: errorCode
+          example: shopUrl/manageNumber
+        spuId:
+          type: string
+          description: spuId is shopUrl join with slash and manageNumber)
+          example: shopUrl/manageNumber
+        price:
+          type: integer
+          format: int64
+        taxFlag:
+          type: integer
+          format: int32
+        priceWithTax:
+          type: integer
+          format: int64
+        priceWithoutTax:
+          type: integer
+          format: int64
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+    SpecsView:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+    ServerResponse:
+      type: object
+    GroupMappingView:
+      required:
+        - spuId
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: errorCode
+          example: shopUrl/manageNumber
+        spuId:
+          type: string
+          description: spuId is shopUrl join with slash and manageNumber)
+          example: shopUrl/manageNumber
+        rskuGroup:
+          $ref: '#/components/schemas/RskuGroup'
+    Rsku:
+      type: object
+      properties:
+        rskuId:
+          type: string
+        safetyPrice:
+          type: integer
+          format: int32
+        marketplacePrice:
+          type: integer
+          format: int32
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sku'
+        rvariantValueHor:
+          type: string
+        rvariantValueVer:
+          type: string
+    RskuGroup:
+      type: object
+      properties:
+        groupShopUrl:
+          type: string
+        groupId:
+          type: string
+        rskus:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rsku'
+        rvariantNameHor:
+          type: string
+        rvariantNameVer:
+          type: string
+    Sku:
+      type: object
+      properties:
+        shopId:
+          type: string
+        shopUrl:
+          type: string
+        manageNumber:
+          type: string
+        variantValueHor:
+          type: string
+        variantValueVer:
+          type: string
+        adsFlg:
+          type: integer
+          format: int32
+    InventoriesView:
+      required:
+        - itemStatus
+        - itemType
+        - optionNameHorizontal
+        - optionNameVertical
+        - spuId
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: errorCode
+          example: shopUrl/manageNumber
+        spuId:
+          type: string
+          description: spuId is shopUrl join with slash and manageNumber)
+          example: shopUrl/manageNumber
+        itemStatus:
+          type: integer
+          description: 'item Status(1: purchasable item, 0: hidden item or draft item)'
+          format: int32
+          default: 0
+        optionNameHorizontal:
+          type: string
+          description: item optionName Horizontal(highest of the Price in a item)
+          example: RED
+        optionNameVertical:
+          type: string
+          description: item optionName Vertical(highest of the Price in a item)
+          example: BIG
+        itemType:
+          type: integer
+          description: >-
+            item Type(0: NORMAL ITEM, 1: TIME SALE NORMAL ITEM, 2: PRE_ORDER
+            ITEM)
+          format: int32
+          example: 0
+        timeSaleStartDateTime:
+          type: string
+          description: timeSaleStartDateTime
+          example: '2022-06-21T08:26:13.936Z'
+        timeSaleEndDateTime:
+          type: string
+          description: timeSaleEndDateTime
+          example: '2022-08-21T08:26:13.936Z'
+        inventories:
+          required:
+            - horizontalName
+          type: object
+          properties:
+            inventoryId:
+              type: string
+            variantId:
+              type: string
+            horizontalName:
+              type: string
+            verticalName:
+              type: string
+            inventory:
+              type: integer
+              format: int32
+            image:
+              type: array
+              items:
+                $ref: '#/components/schemas/ImageView'
+            maxUnit:
+              type: integer
+              format: int32
+            priceWithTax:
+              type: integer
+              format: int64
+            priceWithoutTax:
+              type: integer
+              format: int64
+            articleNumber:
+              type: string
+            productNumber:
+              type: string
+            timeSaleStartDateTime:
+              type: string
+            timeSaleEndDateTime:
+              type: string
+            attributes:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttributesView'
+            specs:
+              type: array
+              items:
+                $ref: '#/components/schemas/SpecsView'
+            hidden:
+              type: boolean
+            variantsValue:
+              type: object
+              additionalProperties:
+                type: string
+            verticalNameI18n:
+              type: object
+              additionalProperties:
+                type: string
+            horizontalNameI18n:
+              type: object
+              additionalProperties:
+                type: string
+            variantsValue18n:
+              type: object
+              additionalProperties:
+                type: object
+                additionalProperties:
+                  type: string
